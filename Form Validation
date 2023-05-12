@@ -1,0 +1,17 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Form from './Form';
+import Result from './Result';
+const Stack = createNativeStackNavigator();
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Form Validation" component={Form} />
+        <Stack.Screen name="Result" component={Result} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
