@@ -1,0 +1,55 @@
+import {View,Text,StyleSheet, ImageBackground} from 'react-native'
+const Result = (props) => {
+  const { route } = props;
+  const { Name,Email,PhoneNumber,Password,Address,Gender,qualification,course } = route.params;
+  return (
+    <View style={styles.card}>
+      <ImageBackground
+       style={styles.backgroundImage}
+       source={require('./ResultBg.jpg')}
+      >
+      <Text style={styles.cardText}>Name: {Name}</Text>
+      <Text style={styles.cardText}>Email: {Email}</Text>
+      <Text style={styles.cardText}>Phone Number: {PhoneNumber}</Text>
+      <Text style={styles.cardText}>Password: {Password}</Text>
+      <Text style={styles.cardText}>Address: {Address}</Text>
+      <Text style={styles.cardText}>Gender: {Gender}</Text>
+      <Text style={styles.cardText}>Qualifications:{qualification}</Text>
+      {qualification =='Bachelor' || qualification == 'Master'?  <Text style={styles.cardText}>Course:{course}</Text>: null}
+      </ImageBackground>
+    </View>
+  );
+};
+export default Result;
+const styles = StyleSheet.create({ 
+  card: {
+    backgroundColor: 'transparent',
+    borderRadius: 5,
+    padding: 15,
+    margin: 15,
+    display:'flex',
+    shadowColor: 'blue',
+    height:500,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  cardText: {
+    fontSize: 20,
+    fontWeight:800,
+    marginBottom: 10,
+    borderWidth:2,
+    borderRadius:10,
+    textAlign:'center',
+    height:50,
+    lineHeight:45
+  },
+  backgroundImage:{
+    flex:1,
+    resizeMode:'cover',
+  }
+})
