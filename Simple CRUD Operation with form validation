@@ -1,0 +1,234 @@
+import React, { useState } from "react";
+import { StyleSheet, View, Button, TextInput, Text, FlatList, ScrollView, TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+const Butto = ({ onPress, style, icon }) => (
+  <TouchableOpacity style={style} onPress={onPress}>
+    <Icon name={icon} size={38} color='blue' />
+  </TouchableOpacity>
+)
+
+const Buttoo = ({ onPress, style, icon }) => (
+  <TouchableOpacity style={style} onPress={onPress}>
+    <Icon name={icon} size={33} color='red' />
+  </TouchableOpacity>
+)
+
+function Form() {
+  const [Name, setName] = useState('')
+  const [Email, setEmail] = useState('')
+  const [PhoneNumber, setPhoneNumber] = useState('')
+  const [Address, setAddress] = useState('')
+  const [formerrors, setformerrors] = useState({})
+  const [datas, setDatas] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleEdit = (item) => {
+    setSelectedItem(item);
+    setName(item.Name)
+    setEmail(item.Email)
+    setAddress(item.Address)
+    setPhoneNumber(item.PhoneNumber)
+  };
+
+  const handleDelete = (item) => {
+    setDatas((prevItems) => prevItems.filter((i) => i.key !== item.key));
+  };
+
+  const validateForm = () => {
+    let errors = {}
+    let isvalid = true
+    if (!Name.trim()) {
+      errors.Name = 'Name is required'; isvalid = false;
+    }
+    else if (!/^[a-zA-Z]{3,}$/.test(Name.trim())) {
+      errors.Name = 'Name must be at least 3 characters long and can only contain alphabets';
+      isvalid = false;
+    }
+    if (!Email.trim()) {
+      errors.Email = 'Email is required';
+      isvalid = false;
+    } 
+    else if (!/\S+@\S+\.\S+/.test(Email)) {
+      errors.Email = 'Email address is invalid';
+      isvalid = false;
+    }
+    if (!PhoneNumber.trim()) {
+      errors.PhoneNumber = 'Phone number is required';
+      isvalid = false;
+    }
+  
+    if (!Address.trim()) {
+      errors.Address = 'Address is required';
+      isvalid = false;
+    }
+    setformerrors(errors)
+    return isvalid
+  }
+  const handlesubmit = () => {
+    if (validateForm()) {
+      if (selectedItem) {
+        // If there is a selected item, it means we are editing an existing item
+        const updatedData = datas.map((item) => {
+          if (item.key === selectedItem.key) {
+            return {
+              ...item,
+              Name,
+              Email,
+              PhoneNumber,
+              Address,
+            };
+          }
+          return item;
+        });
+        setDatas(updatedData);
+        setSelectedItem(null); // Reset the selected item
+      } else {
+        // If there is no selected item, it means we are adding a new item
+        const newdata = {
+          key: Math.random().toString(),
+          Name,
+          Email,
+          PhoneNumber,
+          Address,
+        };
+        setDatas((prev) => [...prev, newdata]);
+      }
+      // Reset the form fields
+      setName('');
+      setEmail('');
+      setPhoneNumber('');
+      setAddress('');
+    } else {
+      console.log('Form validation failed');
+    }
+  };
+  
+
+  function handlerefresh() {
+    setName('')
+    setEmail('')
+    setPhoneNumber('')
+    setAddress('')
+    setformerrors("")
+  }
+
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Enter Your details here!</Text>
+        <TextInput
+          placeholder="Name"
+          onChangeText={(text) => setName(text)}
+          value={Name}
+          style={styles.cardText}
+          maxLength={15}
+          onBlur={validateForm}
+        />
+        {formerrors.Name && <Text style={styles.error}>{formerrors.Name}</Text>}
+        <TextInput
+          placeholder="Email"
+          value={Email}
+          onChangeText={(value) => setEmail(value)}
+          style={styles.cardText}
+          maxLength={25}
+          onBlur={validateForm}
+        />
+        {formerrors.Email && <Text style={styles.error}>{formerrors.Email}</Text>}
+        <TextInput
+          placeholder="PhoneNumber"
+          value={PhoneNumber}
+          onChangeText={(value) => setPhoneNumber(value)}
+          style={styles.cardText}
+          keyboardType='phone-pad'
+          maxLength={10}
+          onBlur={validateForm}
+        />
+        {formerrors.PhoneNumber && <Text style={styles.error}>{formerrors.PhoneNumber}</Text>}
+        <TextInput
+          placeholder="Address"
+          style={styles.cardText}
+          value={Address}
+          onChangeText={(text) => setAddress(text)}
+          maxLength={30}
+          onBlur={validateForm}
+        />
+        {formerrors.Address && <Text style={styles.error}>{formerrors.Address}</Text>}
+       <View style={{flexDirection:'row',justifyContent:'flex-end',padding:10}}>
+       <Button
+          onPress={() => { handlesubmit() }}
+          title='Submit'
+          color='green'
+        />
+        <Button
+          onPress={() => { handlerefresh() }}
+          title='Refresh'
+          color='blue'
+        />
+        <Button
+          onPress={() => { setDatas('') }}
+          title='Erase'
+          color='red'
+        />
+       </View>
+        <View>
+          <FlatList
+            data={datas}
+            renderItem={({ item }) => (
+              <View style={{ flexDirection: 'row', backgroundColor: 'lightgrey', justifyContent: 'space-between', width: '80%', alignSelf: 'center' }}>
+                <View style={{ width: '70%', alignSelf: 'center' }}>
+                <Text style={styles.info}>{item.Name}</Text>
+                <Text style={styles.info}>{item.Email}</Text>
+                <Text style={styles.info}>{item.PhoneNumber}</Text>
+                <Text style={styles.info}>{item.Address}</Text>
+                </View>
+                <View style={{ width: '30%', flexDirection: 'row', backgroundColor: 'lightgrey', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center' }}>
+                      <Butto onPress={() => handleEdit(item)} icon='edit' />
+                      <Buttoo onPress={() => handleDelete(item)} icon='remove' />
+                </View>
+              </View>
+            )}
+            keyExtractor={(item) => item.key}
+          />
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    flex: 1,
+  },
+  cardText: {
+    fontSize: 20,
+    borderWidth: 2,
+    borderRadius: 10,
+    textAlign: 'center',
+    height: 50,
+    lineHeight: 45,
+    width: '80%'
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 800
+  },
+  error: {
+    color: 'red'
+  },
+  Result: {
+    display: 'flex',
+    padding:20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+  info: {
+    fontSize: 16,
+  },
+})
+export default Form
