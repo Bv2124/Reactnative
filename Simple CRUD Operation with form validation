@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Button, TextInput, Text, FlatList, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Button, TextInput, Text, FlatList, ScrollView, TouchableOpacity,ImageBackground } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import Image from './Bg.jpg'
 const Butto = ({ onPress, style, icon }) => (
   <TouchableOpacity style={style} onPress={onPress}>
-    <Icon name={icon} size={38} color='blue' />
+    <Icon name={icon} size={30} color='blue' />
   </TouchableOpacity>
 )
 
@@ -55,6 +55,10 @@ function Form() {
     }
     if (!PhoneNumber.trim()) {
       errors.PhoneNumber = 'Phone number is required';
+      isvalid = false;
+    }
+    else if (!/^\d{10}$/.test(PhoneNumber)){
+      errors.PhoneNumber = 'Phone number is invalid';
       isvalid = false;
     }
   
@@ -114,7 +118,12 @@ function Form() {
   }
 
   return (
-    <ScrollView>
+    <ImageBackground
+    source={Image}
+    resizeMode='cover'
+    style={{flex:1,justifyContent:'center'}}
+    >
+<ScrollView>
       <View style={styles.container}>
         <Text style={styles.title}>Enter Your details here!</Text>
         <TextInput
@@ -175,14 +184,18 @@ function Form() {
           <FlatList
             data={datas}
             renderItem={({ item }) => (
-              <View style={{ flexDirection: 'row', backgroundColor: 'lightgrey', justifyContent: 'space-between', width: '80%', alignSelf: 'center' }}>
-                <View style={{ width: '70%', alignSelf: 'center' }}>
+              <View style={{ flexDirection: 'row', backgroundColor: 'lightgrey', justifyContent: 'space-between', width: '90%', alignSelf: 'center' }}>
+                <View style={{ width: '75%', alignSelf: 'center',height:'100%' }}>
+                  <Text style={styles.title}>Name:-</Text>
                 <Text style={styles.info}>{item.Name}</Text>
+                <Text style={styles.title}>Email:-</Text>
                 <Text style={styles.info}>{item.Email}</Text>
+                <Text style={styles.title}>PhoneNumber:-</Text>
                 <Text style={styles.info}>{item.PhoneNumber}</Text>
+                <Text style={styles.title}>Address:-</Text>
                 <Text style={styles.info}>{item.Address}</Text>
                 </View>
-                <View style={{ width: '30%', flexDirection: 'row', backgroundColor: 'lightgrey', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center' }}>
+                <View style={{ width: '25%', flexDirection: 'row', backgroundColor: 'lightgrey', justifyContent: 'space-between', alignSelf: 'center', alignItems: 'center' }}>
                       <Butto onPress={() => handleEdit(item)} icon='edit' />
                       <Buttoo onPress={() => handleDelete(item)} icon='remove' />
                 </View>
@@ -193,6 +206,7 @@ function Form() {
         </View>
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
@@ -212,10 +226,6 @@ const styles = StyleSheet.create({
     lineHeight: 45,
     width: '80%'
   },
-  title: {
-    fontSize: 30,
-    fontWeight: 800
-  },
   error: {
     color: 'red'
   },
@@ -224,11 +234,12 @@ const styles = StyleSheet.create({
     padding:20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
+    color:'darkblue'
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
   },
 })
 export default Form
