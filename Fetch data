@@ -1,0 +1,45 @@
+ Using Array.from method 
+
+// .then(data => {
+//   const tab = Array.from({ length: 3 }, (_, index) => data.entries[index]);
+//   setTableData(tab)
+// })
+
+
+// Using For method 
+
+// .then(data => {
+//   const tab = []
+//   let count = 0 
+//   for (const entry of data.entries){
+//     tab.push(entry)
+//     count++
+//     if(count === 3){
+//       break
+//     }
+//   }
+//   setTableData(tab)
+// })
+
+// Using Filter method to separate the data from an API
+
+    // .then(data => {
+    //   const filteredEntries = data.entries.filter((entry, index) => index < 2);
+    //   setTableData(filteredEntries);
+//   })
+
+// Using Slice method to separate the data from an API
+
+    // .then(response=>response.json())
+    // .then(data=>setTableData(data.entries.slice(0,3)))
+    // .catch(error=>console.log(error))
+
+// Using the Axios method to get data from API
+    // try {
+    //   // const response = await axios.get('https://api.publicapis.org/entries'); // Modify the API URL to include any query parameters you need
+      
+    //   const data = response.data.entries.slice(0,7); // Retrieve the first 10 entries (adjust the number as needed)
+    //   setTableData(data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
