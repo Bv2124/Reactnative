@@ -1,0 +1,82 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+
+const TicketDataScreen = ({navigation , route}) => {
+
+  const { Raiseddata } = route.params;
+  const [tickets, setTickets] = useState(Raiseddata);
+  useEffect(() => {
+    console.log(Raiseddata,"Raiseddata");
+
+  }, []);
+
+  const handleEditTicket = (index) => {
+    const selectedTicket = Raiseddata[index];
+    navigation.navigate('RaiseRaiseddatacreen', { ticket: selectedTicket,handleUpdateTicket: updateTicket });
+  };
+  const updateTicket = (index, updatedTicket) => {
+    const updatedTickets = [...tickets];
+    updatedTickets[index] = updatedTicket;
+    setTickets(updatedTickets);
+  };
+
+  const handleDeleteTicket = (index) => {
+    const updatedTickets = [...tickets];
+    updatedTickets.splice(index, 1);
+    setTickets(updatedTickets);
+  };
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        {Raiseddata.map((ticket, index) => (
+          <View key={index} style={styles.card}>
+            <Text style={styles.title}>Ticket No{index + 1}</Text>
+            <Text>User Name: {ticket.userName}</Text>
+            <Text>User Email: {ticket.userEmail}</Text>
+            <Text>Ticket Date: {ticket.ticketDate}</Text>
+            <Text>User Age: {ticket.userAge}</Text>
+
+            <TouchableOpacity style={styles.button} onPress={() => handleEditTicket(index)}>
+              <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => handleDeleteTicket(index)}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  card: {
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#0066c0',
+    paddingVertical: 12,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
+
+export default TicketDataScreen;
